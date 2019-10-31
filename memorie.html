@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel=stylesheet href="MemorieStyle.css" >
+    <meta charset="UTF-8">
+    <title>Mick Bosman</title>
+  </head>
+  <body>
+
+    <ul>
+        <li><a href="memorieWelkom.html">Welkom</a></li>
+        <li><a class="active" href="memorie.html">Memorie</a></li>
+        <li><a href="memorieUitleg.html">Uitleg</a></li>
+     </ul>
+
+     <div class= "score_fouten">
+       <h1><b>Score: <span id= "score">0</span></a></h1>
+       <h1><a>Fouten: <span id= "fouten">0</span></a></h1>
+    </div>
+
+    <div class= "button">
+<button type="submit"  onClick="refreshPage()"><h1>Opnieuw?</h1></button>
+</div>
+
+
+         <img src="afbeeldingen/memorie.jpg" alt="memorie_afbeelding"  class="memorie_afbeelding"
+         width="350" height="150" style=" position:absolute; left:40%; top:8%;">
+
+         <section class="memory-game">
+  <div class="memory-card" data-framework="1">
+    <img class="front-face" src="afbeeldingen/smiley_1.png" alt="1" />
+    <img class="back-face" src="afbeeldingen/achterkant.png" alt="JS Badge" />
+  </div>
+  <div class="memory-card" data-framework="2">
+    <img class="front-face" src="afbeeldingen/smiley_2.png" alt="2" />
+    <img class="back-face" src="afbeeldingen/achterkant.png" alt="JS Badge" />
+  </div>
+
+  <div class="memory-card" data-framework="3">
+    <img class="front-face" src="afbeeldingen/smiley_3.png" alt="3" />
+    <img class="back-face" src="afbeeldingen/achterkant.png" alt="JS Badge" />
+  </div>
+  <div class="memory-card" data-framework="4">
+    <img class="front-face" src="afbeeldingen/smiley_4.png" alt="4" />
+    <img class="back-face" src="afbeeldingen/achterkant.png" alt="JS Badge" />
+  </div>
+
+  <div class="memory-card" data-framework="5">
+    <img class="front-face" src="afbeeldingen/smiley_5.png" alt="5" />
+    <img class="back-face" src="afbeeldingen/achterkant.png" alt="JS Badge" />
+  </div>
+  <div class="memory-card" data-framework="6">
+    <img class="front-face" src="afbeeldingen/smiley_6.png" alt="6" />
+    <img class="back-face" src="afbeeldingen/achterkant.png" alt="JS Badge" />
+  </div>
+
+  <div class="memory-card" data-framework="7">
+    <img class="front-face" src="afbeeldingen/smiley_7.webp" alt="7" />
+    <img class="back-face" src="afbeeldingen/achterkant.png" alt="JS Badge" />
+  </div>
+  <div class="memory-card" data-framework="8">
+    <img class="front-face" src="afbeeldingen/smiley_8.png" alt="8" />
+    <img class="back-face" src="afbeeldingen/achterkant.png" alt="JS Badge" />
+  </div>
+  <div class="memory-card" data-framework="1">
+    <img class="front-face" src="afbeeldingen/smiley_1.png" alt="1" />
+    <img class="back-face" src="afbeeldingen/achterkant.png" alt="JS Badge" />
+  </div>
+  <div class="memory-card" data-framework="2">
+    <img class="front-face" src="afbeeldingen/smiley_2.png" alt="2" />
+    <img class="back-face" src="afbeeldingen/achterkant.png" alt="JS Badge" />
+  </div>
+
+  <div class="memory-card" data-framework="3">
+    <img class="front-face" src="afbeeldingen/smiley_3.png" alt="3" />
+    <img class="back-face" src="afbeeldingen/achterkant.png" alt="JS Badge" />
+  </div>
+  <div class="memory-card" data-framework="4">
+    <img class="front-face" src="afbeeldingen/smiley_4.png" alt="4" />
+    <img class="back-face" src="afbeeldingen/achterkant.png" alt="JS Badge" />
+  </div>
+
+  <div class="memory-card" data-framework="5">
+    <img class="front-face" src="afbeeldingen/smiley_5.png" alt="5" />
+    <img class="back-face" src="afbeeldingen/achterkant.png" alt="JS Badge" />
+  </div>
+  <div class="memory-card" data-framework="6">
+    <img class="front-face" src="afbeeldingen/smiley_6.png" alt="6" />
+    <img class="back-face" src="afbeeldingen/achterkant.png" alt="JS Badge" />
+  </div>
+
+  <div class="memory-card" data-framework="7">
+    <img class="front-face" src="afbeeldingen/smiley_7.webp" alt="7" />
+    <img class="back-face" src="afbeeldingen/achterkant.png" alt="JS Badge" />
+  </div>
+  <div class="memory-card" data-framework="8">
+    <img class="front-face" src="afbeeldingen/smiley_8.png" alt="8" />
+    <img class="back-face" src="afbeeldingen/achterkant.png" alt="JS Badge" />
+  </div>
+
+</section>
+
+<script>
+function refreshPage(){
+    window.location.reload();
+}
+
+let Score = document.getElementById('score');
+let score = 0;
+
+let Fouten = document.getElementById('fouten');
+let fouten = 0;
+
+const cards = document.querySelectorAll('.memory-card');
+
+let hasFlippedCard = false;
+let lockBoard = false;
+let firstCard, secondCard;
+
+function flipCard() {
+  if (lockBoard) return;
+  if (this === firstCard) return;
+
+  this.classList.add('flip');
+
+  if (!hasFlippedCard) {
+    hasFlippedCard = true;
+    firstCard = this;
+
+    return;
+  }
+
+  secondCard = this;
+  checkForMatch();
+}
+
+function checkForMatch() {
+  let isMatch = firstCard.dataset.framework === secondCard.dataset.framework;
+
+  isMatch ? disableCards() : unflipCards();
+
+  if (isMatch) {
+    score++;
+    Score.innerHTML = score;
+  }
+}
+
+function disableCards() {
+  firstCard.removeEventListener('click', flipCard);
+  secondCard.removeEventListener('click', flipCard);
+
+  resetBoard();
+}
+
+function unflipCards() {
+  lockBoard = true;
+
+  setTimeout(() => {
+    firstCard.classList.remove('flip');
+    secondCard.classList.remove('flip');
+
+    resetBoard();
+  }, 1500);
+  if (setTimeout) {
+    fouten++;
+    Fouten.innerHTML = fouten;
+  }
+}
+
+function resetBoard() {
+  [hasFlippedCard, lockBoard] = [false, false];
+  [firstCard, secondCard] = [null, null];
+}
+
+(function shuffle() {
+  cards.forEach(card => {
+    let randomPos = Math.floor(Math.random() * 12);
+    card.style.order = randomPos;
+  });
+})();
+
+cards.forEach(card => card.addEventListener('click', flipCard));
+
+</script>
+
+  </body>
+</html>
